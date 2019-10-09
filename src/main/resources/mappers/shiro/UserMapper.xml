@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bitcoding.template.howard.mapper.shiro.UserMapper">
+    <!--    <resultMap type="java.util.Map" id="">-->
+    <!--        <id column="" jdbcType="" property=""/>-->
+    <!--        <result property="FLD_NUMBER" column="FLD_NUMBER" javaType="double" jdbcType="NUMERIC"/>-->
+    <!--        <result property="FLD_VARCHAR" column="FLD_VARCHAR" javaType="string" jdbcType="VARCHAR"/>-->
+    <!--        <result property="FLD_DATE" column="FLD_DATE" javaType="java.sql.Date" jdbcType="DATE"/>-->
+    <!--        <result property="FLD_INTEGER" column="FLD_INTEGER"  javaType="int" jdbcType="INTEGER"/>-->
+    <!--        <result property="FLD_DOUBLE" column="FLD_DOUBLE"  javaType="double" jdbcType="DOUBLE"/>-->
+    <!--        <result property="FLD_LONG" column="FLD_LONG"  javaType="long" jdbcType="INTEGER"/>-->
+    <!--        <result property="FLD_CHAR" column="FLD_CHAR"  javaType="string" jdbcType="CHAR"/>-->
+    <!--        <result property="FLD_BLOB" column="FLD_BLOB"  javaType="[B" jdbcType="BLOB" />-->
+    <!--        <result property="FLD_CLOB" column="FLD_CLOB"  javaType="string" jdbcType="CLOB"/>-->
+    <!--        <result property="FLD_FLOAT" column="FLD_FLOAT"  javaType="float" jdbcType="FLOAT"/>-->
+    <!--        <result property="FLD_TIMESTAMP" column="FLD_TIMESTAMP"  javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+    <!--    </resultMap>-->
+    <resultMap id="BaseResultMap" type="com.bitcoding.template.howard.entity.shiro.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="deptId" column="dept_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="BaseSqlField">
+        user.id,user.user_name,user.password,user.email,user.phone,user.photo,
+        user.last_login_time,user.create_time,user.modify_time,user.status,user.dept_id
+    </sql>
+    <select id="selectUserByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select <include refid="BaseSqlField"/>
+        from user
+        where user_name = #{userName}
+    </select>
+
+</mapper>

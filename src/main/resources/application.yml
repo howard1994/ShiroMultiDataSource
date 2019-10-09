@@ -1,0 +1,14 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: Shiro
+  profiles:
+    active: dev
+shiro:
+  admin: liumeng
+pagehelper:
+  helperDialect: sqlserver
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

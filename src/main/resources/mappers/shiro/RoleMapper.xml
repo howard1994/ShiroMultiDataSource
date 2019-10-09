@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bitcoding.template.howard.mapper.shiro.RoleMapper">
+    <!--    <resultMap type="java.util.Map" id="">-->
+    <!--        <id property="" column="" jdbcType=""/>-->
+    <!--        <result property="FLD_NUMBER" column="FLD_NUMBER" javaType="double" jdbcType="NUMERIC"/>-->
+    <!--        <result property="FLD_VARCHAR" column="FLD_VARCHAR" javaType="string" jdbcType="VARCHAR"/>-->
+    <!--        <result property="FLD_DATE" column="FLD_DATE" javaType="java.sql.Date" jdbcType="DATE"/>-->
+    <!--        <result property="FLD_INTEGER" column="FLD_INTEGER"  javaType="int" jdbcType="INTEGER"/>-->
+    <!--        <result property="FLD_DOUBLE" column="FLD_DOUBLE"  javaType="double" jdbcType="DOUBLE"/>-->
+    <!--        <result property="FLD_LONG" column="FLD_LONG"  javaType="long" jdbcType="INTEGER"/>-->
+    <!--        <result property="FLD_CHAR" column="FLD_CHAR"  javaType="string" jdbcType="CHAR"/>-->
+    <!--        <result property="FLD_BLOB" column="FLD_BLOB"  javaType="[B" jdbcType="BLOB" />-->
+    <!--        <result property="FLD_CLOB" column="FLD_CLOB"  javaType="string" jdbcType="CLOB"/>-->
+    <!--        <result property="FLD_FLOAT" column="FLD_FLOAT"  javaType="float" jdbcType="FLOAT"/>-->
+    <!--        <result property="FLD_TIMESTAMP" column="FLD_TIMESTAMP"  javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>-->
+    <!--    </resultMap>-->
+    <resultMap id="BaseResultMap" type="com.bitcoding.template.howard.entity.shiro.Role">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="memo" column="memo" jdbcType="VARCHAR"/>
+        <collection property="menus" ofType="com.bitcoding.template.howard.entity.shiro.Menu"
+                    select="selectMenuByRoleId" column="id"/>
+        <collection property="operators" ofType="com.bitcoding.template.howard.entity.shiro.Operator"
+                    select="selectOperatorByRoleId" column="id"/>
+
+    </resultMap>
+    <resultMap id="MenuResultMap" type="com.bitcoding.template.howard.entity.shiro.Menu">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="perms" jdbcType="VARCHAR" property="perms"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+    </resultMap>
+    <resultMap id="OperatorResultMap" type="com.bitcoding.template.howard.entity.shiro.Operator">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="menu_id" jdbcType="INTEGER" property="menuId"/>
+        <result column="perms" jdbcType="VARCHAR" property="perms"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+    <sql id="BaseSqlField">
+        role.id, role.name, role.memo
+    </sql>
+    <select id="selectAllRoles" resultMap="BaseResultMap">
+        select <include refid="BaseSqlField"/>
+        from role
+    </select>
+    <select id="selectRolesByUserId" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="BaseSqlField"/>
+        from role
+        where id
+        in (
+        SELECT role_id
+        FROM role_user
+        where user_id = #{userId}
+        )
+    </select>
+    <select id="selectMenuByRoleId" parameterType="int" resultMap="MenuResultMap">
+        SELECT menu.*
+        from menu
+        where id
+        in (
+        SELECT menu_id
+        FROM role_menu
+        where role_id = #{id}
+        )
+    </select>
+    <select id="selectOperatorByRoleId" parameterType="int" resultMap="OperatorResultMap">
+        SELECT operator.*
+        from operator
+        where id
+        in (
+        SELECT operator_id
+        FROM role_operator
+        where role_id = #{id}
+        )
+    </select>
+</mapper>
